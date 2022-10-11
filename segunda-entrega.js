@@ -6,11 +6,9 @@ class Contenedor {
   }
   async save(obj) {
     try {
-      const data = await fs.promises.readFile(`./${this.fileName}`, 'utf-8')
-      const jsonData = JSON.parse(data)
-
-      const idAlreadyExists = jsonData.some(element => element.id === obj.id)
-      const lastId = jsonData[jsonData.length - 1].id
+      const data = await fs.promises.readFile(`./${this.fileName}`, 'utf-8'),
+        jsonData = JSON.parse(data),
+        lastId = jsonData[jsonData.length - 1].id
 
       obj.id = lastId + 1
 
@@ -22,18 +20,22 @@ class Contenedor {
   }
   async getById(num) {
     try {
-      const data = await fs.promises.readFile(`./${this.fileName}`, 'utf-8')
-      const jsonData = JSON.parse(data)
-      const found = jsonData.find(element => element.id === num)
-      console.log(found)
+      const data = await fs.promises.readFile(`./${this.fileName}`, 'utf-8'),
+        jsonData = JSON.parse(data),
+        found = jsonData.find(element => element.id === num)
+      if (found) {
+        console.log(found)
+      } else {
+        console.log(`Index "${num}" not found`)
+      }
     } catch (err) {
       throw new Error(err)
     }
   }
   async getAll() {
     try {
-      const data = await fs.promises.readFile(`./${this.fileName}`, 'utf-8')
-      const jsonData = JSON.parse(data)
+      const data = await fs.promises.readFile(`./${this.fileName}`, 'utf-8'),
+        jsonData = JSON.parse(data)
       console.log(`All the data: ${JSON.stringify(jsonData, null, 2)}`)
     } catch (err) {
       throw new Error(err)
@@ -41,9 +43,9 @@ class Contenedor {
   }
   async deleteById(num) {
     try {
-      const data = await fs.promises.readFile(`./${this.fileName}`, 'utf-8')
-      const jsonData = JSON.parse(data)
-      const foundIndex = jsonData.findIndex(element => element.id === num)
+      const data = await fs.promises.readFile(`./${this.fileName}`, 'utf-8'),
+        jsonData = JSON.parse(data),
+        foundIndex = jsonData.findIndex(element => element.id === num)
       if (foundIndex !== -1) {
         jsonData.splice(foundIndex, 1)
         fs.writeFileSync(
