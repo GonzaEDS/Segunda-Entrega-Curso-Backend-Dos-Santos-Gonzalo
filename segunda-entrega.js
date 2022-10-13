@@ -7,10 +7,14 @@ class Contenedor {
   async save(obj) {
     try {
       const data = await fs.promises.readFile(`./${this.fileName}`, 'utf-8'),
-        jsonData = JSON.parse(data),
-        lastId = jsonData[jsonData.length - 1].id
+        jsonData = JSON.parse(data)
 
-      obj.id = lastId + 1
+      if (jsonData.length > 0) {
+        const lastId = jsonData[jsonData.length - 1].id
+        obj.id = lastId + 1
+      } else {
+        obj.id = 1
+      }
 
       jsonData.push(obj)
       fs.writeFileSync(`./${this.fileName}`, JSON.stringify(jsonData, null, 2))
@@ -26,7 +30,7 @@ class Contenedor {
       if (found) {
         console.log(found)
       } else {
-        console.log(`Index "${num}" not found`)
+        console.log(`ID "${num}" not found`)
       }
     } catch (err) {
       throw new Error(err)
@@ -53,7 +57,7 @@ class Contenedor {
           JSON.stringify(jsonData, null, 2)
         )
       } else {
-        console.log(`Index "${num}" not found`)
+        console.log(`ID "${num}" not found`)
       }
     } catch (err) {
       throw new Error(err)
